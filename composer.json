@@ -1,0 +1,12 @@
+{
+    "require": {
+        "twig/twig": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "core\\":"core/",
+            "app\\":"app/"
+        },
+        "files": ["vendor/twig/twig/lib/Twig/Autoloader.php"]
+    }
+}
