@@ -6,6 +6,7 @@ namespace app\controller;
 
 use Twig_Loader_Filesystem;
 use Twig_Environment;
+use core\http\Request;
 
 /**
  * Class BaseController
@@ -19,14 +20,20 @@ class BaseController
      * @var Twig_Environment
      */
     protected $twig;
+    /**
+     * @var Request
+     */
+    protected $request;
 
     /**
      * AbstractView constructor.
      *
+     * @param Request $request
      * @param Twig_Environment $twig
      */
-    public function __construct(Twig_Environment $twig = null)
+    public function __construct(Request $request, Twig_Environment $twig = null)
     {
+        $this->setRequest($request);
         $this->setTwig($twig);
 
         if (null === $twig) {
@@ -51,6 +58,22 @@ class BaseController
     protected function setTwig(Twig_Environment $twig = null)
     {
         $this->twig = $twig;
+    }
+
+    /**
+     * @return Request
+     */
+    public function getRequest(): Request
+    {
+        return $this->request;
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function setRequest(Request $request)
+    {
+        $this->request = $request;
     }
 
     /**

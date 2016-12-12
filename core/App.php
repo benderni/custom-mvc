@@ -9,6 +9,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use app\config\Router;
 use app\controller\ErrorController;
 use app\controller\IndexController;
+use core\http\Request;
+use Exception;
 
 /**
  * Class App
@@ -56,6 +58,7 @@ class App
     private static function dispatch()
     {
         try {
+            $request = new Request();
             $requestUri = $_SERVER['REQUEST_URI'];
             $request = explode('/', $requestUri);
 
@@ -66,16 +69,16 @@ class App
             }
 
             if (!$router->isAllowed('index', $action)) {
-                $controller = new ErrorController();
+                $controller = new ErrorController($request);
                 $controller->errorAction('40X');
                 return;
             }
 
-            $controller = new IndexController();
+            $controller = new IndexController($request);
             $controllerAction = $action . 'Action';
             $controller->$controllerAction();
-        } catch (\Exception $exc) {
-            $controller = new ErrorController();
+        } catch (Exception $exc) {
+            $controller = new ErrorController($request);
             $controller->errorAction('50X');
             return;
         }
