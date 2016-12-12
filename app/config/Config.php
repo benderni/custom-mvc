@@ -4,19 +4,23 @@ declare(strict_types=1);
 
 namespace app\config;
 
+use core\config\Config as CoreConfig;
+
 /**
  * Class Config
  *
  * @author Benny Van der Stee
  * @package app\config
  */
-class Config
+class Config extends CoreConfig
 {
     /**
-     * Config constructor.
+     * An array of all allowed REQUEST_METHODS
+     * Currently only get methods are allowed
+     *
+     * @var array
      */
-    public function __construct()
-    {
-
-    }
+    protected static $allowedMethods = [
+        'GET'
+    ];
 }

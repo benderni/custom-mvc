@@ -12,11 +12,11 @@ namespace app\config;
 class Router
 {
     /**
-     * A configuration array with all allowed routes in.
+     * An array with all allowed routes in.
      *
      * @var array
      */
-    private $routes = [
+    protected $routes = [
         'index' => ['index', 'about', 'contact'],
     ];
 

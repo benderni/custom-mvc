@@ -7,10 +7,11 @@ namespace core;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use app\config\Router;
+use app\config\Config;
 use app\controller\ErrorController;
 use app\controller\IndexController;
 use core\http\Request;
-use Exception;
+use core\exception\http\RequestException;
 
 /**
  * Class App
@@ -26,8 +27,7 @@ class App
     public static function run()
     {
         self::init();
-        self::config();
-        self::dispatch();
+        self::dispatch(self::config());
     }
 
     /**
@@ -45,20 +45,22 @@ class App
     }
 
     /**
-     * Config
+     * @return Config
      */
     private static function config()
     {
-
+        return new Config();
     }
 
     /**
      * Dispatch the request
+     *
+     * @param Config $config
      */
-    private static function dispatch()
+    private static function dispatch(Config $config)
     {
         try {
-            $request = new Request();
+            $request = new Request($config);
             $requestUri = $_SERVER['REQUEST_URI'];
             $request = explode('/', $requestUri);
 
@@ -70,16 +72,16 @@ class App
 
             if (!$router->isAllowed('index', $action)) {
                 $controller = new ErrorController($request);
-                $controller->errorAction('40X');
+                $controller->errorAction('404');
                 return;
             }
 
             $controller = new IndexController($request);
             $controllerAction = $action . 'Action';
             $controller->$controllerAction();
-        } catch (Exception $exc) {
+        } catch (RequestException $exc) {
             $controller = new ErrorController($request);
-            $controller->errorAction('50X');
+            $controller->errorAction('40x');
             return;
         }
     }

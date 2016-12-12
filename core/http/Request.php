@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace core\http;
 
-use Exception;
+use app\config\Config;
+use core\exception\http\RequestException;
 
 /**
  * Class Request
@@ -14,16 +15,6 @@ use Exception;
  */
 class Request
 {
-    /**
-     * A list of allowed REQUEST_METHODS
-     * Currently only get methods are allowed
-     *
-     * @todo config material, should be moved the config class
-     * @var array
-     */
-    protected $allowedMethods = [
-        'GET'
-    ];
     /**
      * @var string
      */
@@ -43,30 +34,15 @@ class Request
 
     /**
      * Request constructor.
+     *
+     * @param Config $config
+     * @throws RequestException
      */
-    public function __construct()
+    public function __construct(Config $config)
     {
-        if (!in_array($this->getMethod(), $this->getAllowedMethods())) {
-            throw new Exception('Request method not allowed');
+        if (!in_array($this->getMethod(), $config->getAllowedMethods())) {
+            throw new RequestException('Request method not allowed');
         }
-    }
-
-    /**
-     * @todo config material, should be moved the config class
-     * @return array
-     */
-    public function getAllowedMethods(): array
-    {
-        return $this->allowedMethods;
-    }
-
-    /**
-     * @todo config material, should be moved the config class
-     * @param array $allowedMethods
-     */
-    public function setAllowedMethods(array $allowedMethods)
-    {
-        $this->allowedMethods = $allowedMethods;
     }
 
     /**
