@@ -30,7 +30,11 @@ class Request
     /**
      * @var string
      */
-    protected $pathInfo;
+    protected $controllerName;
+    /**
+     * @var string
+     */
+    protected $actionName;
 
     /**
      * Request constructor.
@@ -71,7 +75,7 @@ class Request
     public function getUri(): string
     {
         if (null === $this->uri) {
-            $this->uri = $_SERVER['REQUEST_URI'];
+            $this->uri = strtok($_SERVER['REQUEST_URI'], '?');
         }
 
         return $this->uri;
@@ -106,21 +110,37 @@ class Request
     }
 
     /**
+     * Get the controller name based on the requested uri
+     * Currently Only index
+     *
      * @return string
      */
-    public function getPathInfo(): string
+    public function getControllerName(): string
     {
-        if (null === $this->pathInfo) {
-            $this->pathInfo = $_SERVER['PATH_INFO'];
-        }
-        return $this->pathInfo;
+        return 'index';
     }
 
     /**
-     * @param string $pathInfo
+     * Get the controller action based on the requested uri
+     *
+     * @return string
      */
-    public function setPathInfo(string $pathInfo)
+    public function getControllerAction(): string
     {
-        $this->pathInfo = $pathInfo;
+
+        $urlParts = $this->getUriParts();
+        if (array_key_exists(1, $urlParts) && !empty($urlParts[1])) {
+            return $urlParts[1];
+        }
+
+        return 'index';
+    }
+
+    /**
+     * @return array
+     */
+    protected function getUriParts(): array
+    {
+        return explode('/', $this->getUri());
     }
 }

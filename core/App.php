@@ -9,7 +9,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use app\config\Router;
 use app\config\Config;
 use app\controller\ErrorController;
-use app\controller\IndexController;
+use app\controller\Factory as ControllerFactory;
 use core\http\Request;
 use core\exception\http\RequestException;
 
@@ -61,23 +61,17 @@ class App
     {
         try {
             $request = new Request($config);
-            $requestUri = $_SERVER['REQUEST_URI'];
-            $request = explode('/', $requestUri);
 
             $router = new Router();
-            $action = 'index';
-            if (array_key_exists('1', $request) && !empty($request[1])) {
-                $action = $request[1];
-            }
 
-            if (!$router->isAllowed('index', $action)) {
+            if (!$router->isAllowed($request->getControllerName(), $request->getControllerAction())) {
                 $controller = new ErrorController($request);
                 $controller->errorAction('404');
                 return;
             }
 
-            $controller = new IndexController($request);
-            $controllerAction = $action . 'Action';
+            $controller = ControllerFactory::create($request);
+            $controllerAction = $request->getControllerAction() . 'Action';
             $controller->$controllerAction();
         } catch (RequestException $exc) {
             $controller = new ErrorController($request);

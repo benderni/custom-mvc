@@ -36,6 +36,6 @@ class Config
      */
     public function getAllowedMethods(): array
     {
-        return $this->allowedMethods;
+        return self::$allowedMethods;
     }
 }
