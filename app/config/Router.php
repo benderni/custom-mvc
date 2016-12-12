@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace app\config;
 /**
- * Class Routes
+ * Class Router
  *
  * @author Benny Van der Stee
  * @package app\config
