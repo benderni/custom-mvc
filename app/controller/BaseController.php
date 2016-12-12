@@ -82,6 +82,9 @@ class BaseController
      *
      * @todo catch twig errors
      * @return string
+     * @throws \Twig_Error_Syntax
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Loader
      */
     protected function render(string $file, array $params = [])
     {
