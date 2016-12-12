@@ -6,7 +6,8 @@ namespace core;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use app\config\Routes;
+use app\config\Router;
+use app\controller\ErrorController;
 use app\controller\IndexController;
 
 /**
@@ -54,13 +55,29 @@ class App
      */
     private static function dispatch()
     {
-//        $requestUri = htmlentities($_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8');
+        try {
+            $requestUri = $_SERVER['REQUEST_URI'];
+            $request = explode('/', $requestUri);
 
-        $controller = new IndexController();
-        $controller->indexAction();
+            $router = new Router();
+            $action = 'index';
+            if (array_key_exists('1', $request) && !empty($request[1])) {
+                $action = $request[1];
+            }
 
-//        $route = new Routes();
+            if (!$router->isAllowed('index', $action)) {
+                $controller = new ErrorController();
+                $controller->errorAction('40X');
+                return;
+            }
 
-//        print_r($requestUri);
+            $controller = new IndexController();
+            $controllerAction = $action . 'Action';
+            $controller->$controllerAction();
+        } catch (\Exception $exc) {
+            $controller = new ErrorController();
+            $controller->errorAction('50X');
+            return;
+        }
     }
 }

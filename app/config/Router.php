@@ -9,7 +9,7 @@ namespace app\config;
  * @author Benny Van der Stee
  * @package app\config
  */
-class Routes
+class Router
 {
     /**
      * A configuration array with all allowed routes in.
@@ -17,7 +17,7 @@ class Routes
      * @var array
      */
     private $routes = [
-        'index' => ['index'],
+        'index' => ['index', 'about', 'contact'],
     ];
 
     /**
@@ -46,7 +46,7 @@ class Routes
      */
     public function isAllowed(string $controller, string $action)
     {
-        return array_key_exists($this->getRoutes()[$controller])
-            && in_array($this->getRoutes()[$controller][$action]);
+        return array_key_exists($controller, $this->getRoutes())
+            && in_array($action, $this->getRoutes()[$controller]);
     }
 }
