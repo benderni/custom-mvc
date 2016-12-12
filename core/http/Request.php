@@ -18,6 +18,7 @@ class Request
      * A list of allowed REQUEST_METHODS
      * Currently only get methods are allowed
      *
+     * @todo config material, should be moved the config class
      * @var array
      */
     protected $allowedMethods = [
@@ -51,6 +52,7 @@ class Request
     }
 
     /**
+     * @todo config material, should be moved the config class
      * @return array
      */
     public function getAllowedMethods(): array
@@ -59,6 +61,7 @@ class Request
     }
 
     /**
+     * @todo config material, should be moved the config class
      * @param array $allowedMethods
      */
     public function setAllowedMethods(array $allowedMethods)
